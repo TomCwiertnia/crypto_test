@@ -6,11 +6,9 @@
     <link rel="stylesheet" type="text/css" href="crypto.css">
   </head>
   <body>
-    <div id="formula" class="formula">
-      <input type="text"> Name</input>
-      <input type="text"> Surname</input>
-      <input type="text"> Password</input>
-      <button type="submit" method="submit" action="localhost:5000/cryptIn">SUBMIT </button>
-    </div>
+    <form method="POST" action="http://localhost:3300/" id="form1">
+      <input type="text" name="psw1" id="psw1"> Password</input>
+    </form>
+    <button type="submit" form="form1">SUBMIT </button>
   </body>
 </html>
