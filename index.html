@@ -6,9 +6,18 @@
     <link rel="stylesheet" type="text/css" href="crypto.css">
   </head>
   <body>
+    SIGN in
     <form method="POST" action="http://localhost:3300/" id="form1">
-      <input type="text" name="psw1" id="psw1"> Password</input>
+      <input type="text"  id="nameSignIn" required> Name </input>
+      <input type="text"  id="emailSignIn" required> Email</input>
+      <input type="text"  id="pswSignIn" required> Password</input>
     </form>
-    <button type="submit" form="form1">SUBMIT </button>
+    <button type="submit" form="form1">sign in </button>
+LOG in
+    <form method="POST" action="http://localhost:3300/cryptin" id="formLogIn">
+      <input type="text" id="email" required> Email</input>
+      <input type="text" name="pswLogIn" id="psw" required> Password</input>
+    </form>
+    <button type="submit" form="formLogIn">log IN </button>
   </body>
 </html>
