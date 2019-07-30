@@ -17,7 +17,7 @@ const myPlainTextPassword = 'password123';
 const someOtherPlaintextPassword = 'pass123notGood';
 
 app.post('/cryptin', (req, res) => {
-var spis;
+var spis, temp;
 
 
   MongoClient.connect('mongodb://localhost:27017', (err, client) => {
@@ -27,26 +27,27 @@ var spis;
       console.log('MongoDB conected !')
       const db = client.db('users');
 
-      //funkcja ASYNC CALLBACK function !!!
-      
-    function polaczMongo(callback) {
-      db.collection('users').find({name:'Tom'}).toArray((err, spis) => {
+  //funkcja ASYNC CALLBACK function !!!
 
+
+   async function polaczMongo() {
+    temp = await db.collection('users').find({}).toArray((err, spis) => {
         if (err) {
           console.log(err);
         }
-        console.log('spis:' + JSON.parse(JSON.stringify(spis))[0].name);
-        callback(JSON.parse(JSON.stringify(spis)));
+        console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(spis))[0].name);
+        spis = JSON.parse(JSON.stringify(spis));
+
       });
+      console.log('temp w polaczmongo:' + temp);
     }
 
-    polaczMongo((spis) => {
-        console.log('spis:' + spis[0].name);
-    });
+    polaczMongo().then((data =>  {
+      console.log(spis);
+    }));
 
-
-
-      client.close();
+    console.log('temp poza polaczmongo:' + polaczMongo());
+    client.close();
     }
   })
 
