@@ -19,56 +19,50 @@ const someOtherPlaintextPassword = 'pass123notGood';
 app.post('/cryptin', (req, res) => {
 var spis, temp, temp2;
 
-
+const loadData = new Promise((resolve, reject) => {
   MongoClient.connect('mongodb://localhost:27017', (err, client) => {
-    if (err) {
-      throw err;
-    } else {
-      console.log('MongoDB conected !')
-      const db = client.db('users');
+      if (err) {
+        throw err;
+      } else {
+        console.log('MongoDB conected !')
+        const db = client.db('users');
+        db.collection('users').find({}).toArray((err, data) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(data))[0].psw);
+          spis = JSON.parse(JSON.stringify(data));
+          resolve(spis);
+        });
+      }
+    }
+  )
+})
 
-  //funkcja ASYNC CALLBACK function !!!
+loadData.then(
+  result => {
+    spis = JSON.parse(JSON.stringify(spis));
+    console.log('this iS IT???: ' + spis[0].psw)
+  },
+  error => console.log(err)
+);
 
-  async function polaczMongo() {
-
-   await db.collection('users').find({}).toArray((err, data ) => {
-       if (err) {
-         console.log(err);
-       }
-       //console.log(data);
-       console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(data))[0].psw);
-       spis = JSON.parse(JSON.stringify(data ));
-       return spis;
-     });
-     console.log('temp ready?:' + temp);
-   }
-
-function succesCallback(result) {
-  console.log('success');
-  console.log('result:' + result);
-}
-
-function failureCallback(error) {
-  console.log('failure');
-}
+/* dostaję na konsoli:
+MongoDB conected !
+Temp in polaczMongo: undefined
+success
+resultFunc:undefined
+Temp:undefined
+spis wewnatrz funkc:$2b$13$GQlr4SszE4hBXzdSS2lNte3iLx7AuGxgd2tExyZciwfRRaCCBdYRG
+*/
 
 //var promise = polaczMongo();
 //promise.then(succesCallback, failureCallback);
 
-polaczMongo().then(succesCallback, failureCallback);
 
 
 
-// expected output: [object Promise]
 
-    //to wynik jakichs tam prob - sam troche nie wiem juz ;|
-    polaczMongo().then((data =>  {
-      console.log('poza:' + spis);
-    }));
-
-    client.close();
-    }
-  })
 
 
 
