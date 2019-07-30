@@ -17,16 +17,41 @@ const myPlainTextPassword = 'password123';
 const someOtherPlaintextPassword = 'pass123notGood';
 
 app.post('/cryptin', (req, res) => {
+var spis;
+
 
   MongoClient.connect('mongodb://localhost:27017', (err, client) => {
     if (err) {
       throw err;
     } else {
       console.log('MongoDB conected !')
-      const db = client.db('mfk');
+      const db = client.db('users');
+
+      //funkcja ASYNC CALLBACK function !!!
+      
+    function polaczMongo(callback) {
+      db.collection('users').find({name:'Tom'}).toArray((err, spis) => {
+
+        if (err) {
+          console.log(err);
+        }
+        console.log('spis:' + JSON.parse(JSON.stringify(spis))[0].name);
+        callback(JSON.parse(JSON.stringify(spis)));
+      });
+    }
+
+    polaczMongo((spis) => {
+        console.log('spis:' + spis[0].name);
+    });
+
+
+
       client.close();
     }
   })
+
+
+
   console.log('req.body: ' + req.body.pswLogIn);
   bcrypt.hash(req.body.pswLogIn, saltRounds, (err, hash) =>{
     //console.log('req.body.email:' + req.body.email);
