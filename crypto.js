@@ -17,7 +17,7 @@ const myPlainTextPassword = 'password123';
 const someOtherPlaintextPassword = 'pass123notGood';
 
 app.post('/cryptin', (req, res) => {
-var spis, temp;
+var spis, temp, temp2;
 
 
   MongoClient.connect('mongodb://localhost:27017', (err, client) => {
@@ -29,23 +29,41 @@ var spis, temp;
 
   //funkcja ASYNC CALLBACK function !!!
 
-   async function polaczMongo() {
+  async function polaczMongo() {
 
-    temp = await db.collection('users').find({}).toArray((err, spis) => {
-        if (err) {
-          console.log(err);
-        }
-        //tutaj wszystko jest OK - dane sa pobierane ale jak to z funkcja ASYNC
-        // nie sa 'przekazywane' dalej
-        //a chodzi o to zeby spis np 'uzytkownikow' byl w miare dostepny za newnatrz funkcji
-        console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(spis))[0].name);
-        spis = JSON.parse(JSON.stringify(spis));
-      });
-      console.log('temp w polaczmongo:' + temp);
-    }
+   await db.collection('users').find({}).toArray((err, data ) => {
+       if (err) {
+         console.log(err);
+       }
+       //console.log(data);
+       console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(data))[0].psw);
+       spis = JSON.parse(JSON.stringify(data ));
+       return spis;
+     });
+     console.log('temp ready?:' + temp);
+   }
+
+function succesCallback(result) {
+  console.log('success');
+  console.log('result:' + result);
+}
+
+function failureCallback(error) {
+  console.log('failure');
+}
+
+//var promise = polaczMongo();
+//promise.then(succesCallback, failureCallback);
+
+polaczMongo().then(succesCallback, failureCallback);
+
+
+
+// expected output: [object Promise]
+
     //to wynik jakichs tam prob - sam troche nie wiem juz ;|
     polaczMongo().then((data =>  {
-      console.log(spis);
+      console.log('poza:' + spis);
     }));
 
     client.close();
