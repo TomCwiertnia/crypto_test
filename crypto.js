@@ -29,24 +29,25 @@ var spis, temp;
 
   //funkcja ASYNC CALLBACK function !!!
 
-
    async function polaczMongo() {
+
     temp = await db.collection('users').find({}).toArray((err, spis) => {
         if (err) {
           console.log(err);
         }
+        //tutaj wszystko jest OK - dane sa pobierane ale jak to z funkcja ASYNC
+        // nie sa 'przekazywane' dalej
+        //a chodzi o to zeby spis np 'uzytkownikow' byl w miare dostepny za newnatrz funkcji
         console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(spis))[0].name);
         spis = JSON.parse(JSON.stringify(spis));
-
       });
       console.log('temp w polaczmongo:' + temp);
     }
-
+    //to wynik jakichs tam prob - sam troche nie wiem juz ;|
     polaczMongo().then((data =>  {
       console.log(spis);
     }));
 
-    console.log('temp poza polaczmongo:' + polaczMongo());
     client.close();
     }
   })
