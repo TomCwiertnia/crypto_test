@@ -17,54 +17,39 @@ const myPlainTextPassword = 'password123';
 const someOtherPlaintextPassword = 'pass123notGood';
 
 app.post('/cryptin', (req, res) => {
-var spis, temp, temp2;
+  let spis, temp, temp2;
 
-const loadData = new Promise((resolve, reject) => {
-  MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+  const loadData = new Promise((resolve, reject) => {
+    MongoClient.connect('mongodb://localhost:27017', (err, client) => {
       if (err) {
-        throw err;
+        throw(err);
+
       } else {
-        console.log('MongoDB conected !')
-        const db = client.db('users');
-        db.collection('users').find({}).toArray((err, data) => {
-          if (err) {
-            console.log(err);
-          }
-          console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(data))[0].psw);
-          spis = JSON.parse(JSON.stringify(data));
-          resolve(spis);
-        });
-      }
-    }
-  )
-})
+          console.log('MongoDB conected !')
+          const db = client.db('users');
+          db.collection('users').find({}).toArray((err, data) => {
+            if (err) {
+              throw(err);
+            }
+            console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(data))[0].psw);
+            spis = JSON.parse(JSON.stringify(data));
+            resolve(spis);
+            //process.exit(1);
+            client.close();
+          });
+        }
+    })
+  })
 
-loadData.then(
-  result => {
-    spis = JSON.parse(JSON.stringify(spis));
-    console.log('this iS IT???: ' + spis[0].psw)
-  },
-  error => console.log(err)
-);
-
-/* dostaję na konsoli:
-MongoDB conected !
-Temp in polaczMongo: undefined
-success
-resultFunc:undefined
-Temp:undefined
-spis wewnatrz funkc:$2b$13$GQlr4SszE4hBXzdSS2lNte3iLx7AuGxgd2tExyZciwfRRaCCBdYRG
-*/
-
-//var promise = polaczMongo();
-//promise.then(succesCallback, failureCallback);
+  loadData.then(
+    result => {
+      spis = JSON.parse(JSON.stringify(spis));
+      console.log('this iS IT???: ' + spis[0].psw);
 
 
-
-
-
-
-
+    },
+    error => console.log(err)
+  );
 
   console.log('req.body: ' + req.body.pswLogIn);
   bcrypt.hash(req.body.pswLogIn, saltRounds, (err, hash) =>{
@@ -73,10 +58,11 @@ spis wewnatrz funkc:$2b$13$GQlr4SszE4hBXzdSS2lNte3iLx7AuGxgd2tExyZciwfRRaCCBdYRG
       if (res2) {
         console.log('psw correct!');
         console.log(hash);
-
-      } else if (!res2) {
+        res.send('welcome');
+    } else if (!res2) {
         console.log('password incorrect...');
         console.log(hash);
+        res.send('NO');
       }
     })
   })
