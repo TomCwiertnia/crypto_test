@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="PL" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Kolportaz materialow</title>
+    <link rel="stylesheet" type="text/css" href="welcome1.css">
+    <script src="welcome1.js"></script>
+  </head>
+  <body>
+    <div id="container1" class="container1">
+      <div id="regWin">
+        <form action="http://localhost:3000/registration" method="POST" id="registrationForm" class="regLogForm" >
+        <img src="logo1.png" class="logo">
+        <span> Rejestracja</span>
+        <label for=nameR style="display: inline-block">imie <input name=nameR type=text style="display:block"/>
+        </label>
+        <label for=email style="display: inline-block">email <input name=email type=email style="display:block"/>
+        </label>
+        <label for=psw style="display:inline-block">haslo <input name=psw type=password style="display:block"/>
+        </label>
+        <button type="submit" form="registrationForm" class="regButton">rejestruj</button>
+        </form>
+      </div>
+      <div class="buttons">
+        <button id="regButton" type="button" onclick="signUp()" class="chosen">Rejestracja</button>
+        <button id="loginButton" type="button" onclick="logIn()" class="">Logowanie</button>
+      </div>
+    </div>
+
+  </body>
+</html>
