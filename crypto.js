@@ -17,42 +17,39 @@ const myPlainTextPassword = 'password123';
 const someOtherPlaintextPassword = 'pass123notGood';
 
 app.post('/cryptin', (req, res) => {
-var spis, temp;
+  let spis, temp, temp2;
 
+  const loadData = new Promise((resolve, reject) => {
+    MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+      if (err) {
+        throw(err);
 
-  MongoClient.connect('mongodb://localhost:27017', (err, client) => {
-    if (err) {
-      throw err;
-    } else {
-      console.log('MongoDB conected !')
-      const db = client.db('users');
-
-  //funkcja ASYNC CALLBACK function !!!
-
-   async function polaczMongo() {
-
-    temp = await db.collection('users').find({}).toArray((err, spis) => {
-        if (err) {
-          console.log(err);
+      } else {
+          console.log('MongoDB conected !')
+          const db = client.db('users');
+          db.collection('users').find({}).toArray((err, data) => {
+            if (err) {
+              throw(err);
+            }
+            console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(data))[0].psw);
+            spis = JSON.parse(JSON.stringify(data));
+            resolve(spis);
+            //process.exit(1);
+            client.close();
+          });
         }
-        //tutaj wszystko jest OK - dane sa pobierane ale jak to z funkcja ASYNC
-        // nie sa 'przekazywane' dalej
-        //a chodzi o to zeby spis np 'uzytkownikow' byl w miare dostepny za newnatrz funkcji
-        console.log('spis wewnatrz funkc:' + JSON.parse(JSON.stringify(spis))[0].name);
-        spis = JSON.parse(JSON.stringify(spis));
-      });
-      console.log('temp w polaczmongo:' + temp);
-    }
-    //to wynik jakichs tam prob - sam troche nie wiem juz ;|
-    polaczMongo().then((data =>  {
-      console.log(spis);
-    }));
-
-    client.close();
-    }
+    })
   })
 
+  loadData.then(
+    result => {
+      spis = JSON.parse(JSON.stringify(spis));
+      console.log('this iS IT???: ' + spis[0].psw);
 
+
+    },
+    error => console.log(err)
+  );
 
   console.log('req.body: ' + req.body.pswLogIn);
   bcrypt.hash(req.body.pswLogIn, saltRounds, (err, hash) =>{
@@ -61,10 +58,11 @@ var spis, temp;
       if (res2) {
         console.log('psw correct!');
         console.log(hash);
-
-      } else if (!res2) {
+        res.send('welcome');
+    } else if (!res2) {
         console.log('password incorrect...');
         console.log(hash);
+        res.send('NO');
       }
     })
   })
