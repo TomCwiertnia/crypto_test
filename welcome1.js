@@ -20,14 +20,14 @@ function signUp() {
     document.getElementById("container1").prepend(regWin);
     document.getElementById("regWin").innerHTML = '<form action="http://localhost:3000/registration" method="POST" id="registrationForm" class="regLogForm" >'
       + '<img src="logo1.png" class="logo">'
-      + '<span> Rejestracja</span>'
+      + '<p style="font-weight:600" class="center"> Rejestracja</p>'
       + '<label for=nameR style="display: inline-block">imie <input name=nameR type=text style="display:block"/>'
       + '</label>'
       + '<label for=email style="display: inline-block">email <input name=email type=email style="display:block"/>'
       + '</label>'
       + '<label for=psw style="display:inline-block">haslo <input name=psw type=password style="display:block"/>'
       + '</label>'
-      + '<button type="submit" form="registrationForm" class="regButton">rejestruj</button>'
+      + '<button type="submit" form="registrationForm" class="regButton center">rejestruj</button>'
       + '</form>';
 
     document.getElementById("regWin").classList.add("regWinFadeIn");
@@ -52,18 +52,16 @@ function logIn() {
     regButton.classList.toggle("chosen");
     loginButton.classList.toggle("chosen");
     loginWin.id = "loginWin";
-    
+
     document.getElementById("container1").prepend(loginWin);
     document.getElementById("loginWin").innerHTML = '<form action="http://localhost:3000/registration" method="POST" id="registrationForm" class="regLogForm" >'
       + '<img src="logo1.png" class="logo">'
-      + '<span> Logowanie </span>'
-      + '<label for=nameR style="display: inline-block">imie <input name=nameR type=text style="display:block"/>'
-      + '</label>'
+      + '<p style="font-weight:600" class="center"> Logowanie</p>'
       + '<label for=email style="display: inline-block">email <input name=email type=email style="display:block"/>'
       + '</label>'
       + '<label for=psw style="display:inline-block">haslo <input name=psw type=password style="display:block"/>'
       + '</label>'
-      + '<button type="submit" form="registrationForm" class="regButton">rejestruj</button>'
+      + '<button type="submit" form="registrationForm" class="regButton center">zaloguj</button>'
       + '</form>';
 
     document.getElementById("loginWin").classList.add("regWinFadeIn");

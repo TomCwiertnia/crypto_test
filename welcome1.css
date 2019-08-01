@@ -1,5 +1,6 @@
 body {
-  font-size: 1.1vmax ;
+  font-size: 1vmax ;
+  font-family: 'Raleway', sans-serif;
 }
 
 .okno {
@@ -59,8 +60,6 @@ body {
   padding-right: 15px;
   margin-top:1em;
   position: relative;
-  left: 50%;
-  transform: translate(-50%, 0);
 }
 
 .logo {
@@ -84,4 +83,9 @@ body {
 .regWinFadeIn {
   opacity: 1;
   transition: all 0.4s;
+}
+
+.center {
+  margin-left:50%;
+  transform:translate(-50%,0);
 }
