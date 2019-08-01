@@ -1,91 +1,99 @@
-body {
-  font-size: 1vmax ;
-  font-family: 'Raleway', sans-serif;
+@media only screen and (max-width: 768px) {
+
+
 }
 
-.okno {
-  margin: auto;
-  width: 30vw;
-  height: 100vh;
-}
+@media only screen and (min-width: 768px) {
 
-.oknoButton {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  display:flex;
-  margin: auto;
-}
+  body {
+    font-size: 1.1vmax ;
+    font-family: 'Raleway', sans-serif;
+  }
 
-.okno button {
-  width:10vw;
-  box-shadow: 2px 2px gray;
-  padding: 1em 1em 1em 1em;
-}
+  .okno {
+    margin: auto;
+    width: 30vw;
+    height: 100vh;
+  }
 
-.container1 {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 3fr 1fr 1fr;
-  justify-content: center;
-}
+  .oknoButton {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    display:flex;
+    margin: auto;
+  }
 
-.buttons {
-  margin: auto;
-}
+  .okno button {
+    width:10vw;
+    box-shadow: 2px 2px gray;
+    padding: 1em 1em 1em 1em;
+  }
 
-.buttons button {
-  width: 120px;
-  height: 50px;
-}
+  .container1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 3fr 1fr 1fr;
+    justify-content: center;
+  }
 
-.regLogForm {
-  width: 10vw;
-  padding: 3em;
-  margin: auto;
-  margin-top:50px;
-  border: 3px solid rgba(255,0,0,0.7);
-}
+  .regLogForm {
+    width: 10vw;
+    padding: 3em;
+    margin: auto;
+    margin-top:50px;
+    border: 3px solid rgba(255,0,0,0.7);
+  }
 
-.regLogForm input{
-  width: 10vw;
-}
+  .regLogForm input{
+    width: 10vw;
+  }
 
-.regButton {
-  width: auto;
-  height: 30px;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-top:1em;
-  position: relative;
-}
+  .regButton {
+    width: auto;
+    height: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top:1em;
+    position: relative;
+  }
 
-.logo {
-  position:relative;
-  top: -4em;
-  left:-2vw;
-  width: 10vw;
-}
+  .logo {
+    position:relative;
+    top: -4em;
+    left:-2vw;
+    width: 10vw;
+  }
 
-.chosen {
-  border-color: rgba(30,30,30, 0.3) rgba(30,30,30, 0.3) rgba(255,0,0,0.7) rgba(30,30,30, 0.3);
-  border-width: 1px 1px 3px 1px;
-  background: rgba(160,160,160, 0.2);
-}
+  .chosen {
+    border-color: rgba(30,30,30, 0.3) rgba(30,30,30, 0.3) rgba(255,0,0,0.7) rgba(30,30,30, 0.3);
+    border-width: 1px 1px 3px 1px;
+    background: rgba(160,160,160, 0.2);
+  }
 
-.regWinFadeOut {
-  opacity: 0;
-  transition: all 0.4s;
-}
+  .regWinFadeOut {
+    opacity: 0;
+    transition: all 0.4s;
+  }
 
-.regWinFadeIn {
-  opacity: 1;
-  transition: all 0.4s;
-}
+  .regWinFadeIn {
+    opacity: 1;
+    transition: all 0.4s;
+  }
 
-.center {
-  margin-left:50%;
-  transform:translate(-50%,0);
+  .center {
+    margin-left:50%;
+    transform:translate(-50%,0);
+  }
+  .buttons {
+    margin: auto;
+  }
+
+  .buttons button {
+    width: 9vw;
+    height: 3em;
+  }
+
 }
