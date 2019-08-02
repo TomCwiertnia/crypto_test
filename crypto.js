@@ -23,41 +23,58 @@ app.post('/newuser', (req,res) => {
     // sprawdzamy czy istnieje email jesli tak to blad
     // jesli nie istnieje to hasujemy i zapisujemy uzytkownika
     // odsylamy do strony logowania
-    MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+
+    const checkUser = new Promise((resolve, reject) => {
+      MongoClient.connect('mongodb://localhost:27017', (err, client) => {
       if (err) {
         throw(err);
       } else {
-          const db = client.db('users');
-          //checking if an user with same email is already in the database
-          console.log('user email: ' + req.body.email);
-
-          // userExists returns PROMISE
-          let userExists = db.collection('users').find({'email': req.body.email}).toArray();
-            console.log('TUTAJ : ' + userExists);
-          if ( 1 > 0 )
-
-           {
-            console.log('account exists');
-            console.log('MongoDb anwser: ' + db.collection('users').find({'email': JSON.stringify(req.body.email)}));
-            console.log('MongoDb name: ' + db.collection('users').find({'email': req.body.email}).email);
-            //res.send('account with that email already exist!');
-          } else if (!db.collection('users').find({'email': JSON.stringify(req.body.email)})) {
-            console.log('MongoDb anwser: ' + db.collection('users').find({'email': req.body.email}));
-            console.log('account does NOT exists - creating new user');
-            let hashPsw = bcrypt.hash(req.body.psw, saltRounds, (err, hash) => {
-              if(err) {
-                throw(err);
-              }
-            });
-            //new user insertion
-            db.collections.insertOne({name: req.body.name, email: req.body.email, psw: hashPsw});
-          }
-          //res.send('New user has been created. Hello ' + req.body.name);
-          client.close();
+        const db = client.db('users');
+        //checking if an user with same email is already in the database
+        // userExists returns PROMISE
+        let userExists = db.collection('users').find({'email': req.body.email});
+          console.log('userExists : ' + userExists);
+        if (userExists)
+         {
+           console.log('user exists!');
+           resolve(userExists);
+        }
+        else if (!userExists) {
+          console.log('account does NOT exists - creating new user');
+          /*
+          let hashPsw = bcrypt.hash(req.body.psw, saltRounds, (err, hash) => {
+            if(err) {
+              throw(err);
+            }
+          });
+          //new user insertion
+          db.collections.insertOne({name: req.body.name, email: req.body.email, psw: hashPsw});
+          */
+          resolve(userExists);
 
         }
-      });
+        //res.send('New user has been created. Hello ' + req.body.name);
+        client.close();
+
+      }
+    }); //end of mongoClient.connect
+  }); //end of PROMISEs
+
+  checkUser.then(
+    result => {
+      console.log('success!');
+      userExists = JSON.parse(JSON.stringify(userExists));
+      console.log('userExists = ' + userExists.name);
+    },
+    error => {
+     console.log('err');
+    }
+  );
 });
+
+
+
+
 
 
 app.post('/cryptin', (req, res) => {
@@ -81,7 +98,7 @@ app.post('/cryptin', (req, res) => {
           });
         }
     })
-  })
+  });
 
   loadData.then(
     result => {
@@ -107,4 +124,4 @@ app.post('/cryptin', (req, res) => {
       }
     })
   })
-})
+});
