@@ -12,8 +12,6 @@ function signUp() {
     document.getElementById("loginWin").classList.add("regWinFadeOut");
     document.getElementById("loginWin").parentNode.removeChild(document.getElementById("loginWin"));
 
-
-
     regButton.classList.toggle("chosen");
     loginButton.classList.toggle("chosen");
     regWin.id = "regWin";

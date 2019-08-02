@@ -5,11 +5,12 @@
     <title>Kolportaz materialow</title>
     <link rel="stylesheet" type="text/css" href="welcome1.css">
     <script src="welcome1.js"></script>
+
   </head>
   <body>
     <div id="container1" class="container1">
       <div id="regWin">
-        <form action="http://localhost:3000/registration" method="POST" id="registrationForm" class="regLogForm" >
+        <form method="POST" action="http://localhost:3300/newuser" id="registrationForm" class="regLogForm" >
           <img src="logo1.png" class="logo">
           <p style="font-weight:600;" class="center">Rejestracja</p>
           <label for=nameR style="display: inline-block">imie <input name=nameR type=text style="display:block"/>
@@ -18,8 +19,9 @@
           </label>
           <label for=psw style="display:inline-block">haslo <input name=psw type=password style="display:block"/>
           </label>
-          <button type="submit" form="registrationForm" class="regButton center">rejestruj</button>
+
         </form>
+        <button type="submit" form="registrationForm" class="regButton center">rejestruj</button>
       </div>
       <div class="buttons">
         <button id="regButton" type="button" onclick="signUp()" class="chosen ">Rejestracja</button>
