@@ -12,6 +12,7 @@
       <div id="regWin">
         <form method="POST" action="http://localhost:3300/newuser" id="registrationForm" class="regLogForm" target="hidden2">
           <img src="logo1.png" class="logo">
+          <p style="font-size:0.9em" class="center"> account with given email address already exists ! </p>
           <p style="font-weight:600;" class="center">Rejestracja</p>
           <label for=nameR style="display: inline-block">imie <input name=nameR type=text style="display:block"/>
           </label>
@@ -29,7 +30,7 @@
       </div>
       <!--load POST answer to hidden iFrame so we dont get redirection after receving it -->
       <iframe name="hidden2" style="display:none" id="hidden2"></iframe>
-      
+
 
     </div>
 

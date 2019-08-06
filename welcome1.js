@@ -16,7 +16,7 @@ function signUp() {
     loginButton.classList.toggle("chosen");
     regWin.id = "regWin";
     document.getElementById("container1").prepend(regWin);
-    document.getElementById("regWin").innerHTML = '<form action="http://localhost:3000/registration" method="POST" id="registrationForm" class="regLogForm" >'
+    document.getElementById("regWin").innerHTML = '<form action="http://localhost:3300/newuser" method="POST" id="registrationForm" class="regLogForm" >'
       + '<img src="logo1.png" class="logo">'
       + '<p style="font-weight:600" class="center"> Rejestracja</p>'
       + '<label for=nameR style="display: inline-block">imie <input name=nameR type=text style="display:block"/>'
@@ -52,7 +52,7 @@ function logIn() {
     loginWin.id = "loginWin";
 
     document.getElementById("container1").prepend(loginWin);
-    document.getElementById("loginWin").innerHTML = '<form action="http://localhost:3000/registration" method="POST" id="registrationForm" class="regLogForm" >'
+    document.getElementById("loginWin").innerHTML = '<form action="http://localhost:3300/login" method="POST" id="registrationForm" class="regLogForm" >'
       + '<img src="logo1.png" class="logo">'
       + '<p style="font-weight:600" class="center"> Logowanie</p>'
       + '<label for=email style="display: inline-block">email <input name=email type=email style="display:block"/>'

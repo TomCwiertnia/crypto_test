@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="/map.css">
+    <link rel="stylesheet" href="/mapCss.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <meta charset="utf-8">
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    <title>OpenLayersExample</title>
+  </head>
+<body>
+  <div class='map' id='map'>
+    <IFRAME name="hiddenIframe" id="hiddenIFrame" style="display:none">IFRAME</IFRAME>
+        <!--
+          load from mdfDb variable
+         <button onClick="sendJSON()" id="sendJSONButton"> load db from JS</button>
+       -->
+    <div class="menuContainer" id="menuContainer">
+      <div class="leftMenu" id="leftMenu">
+
+        <!--   <input type="image" src="buttonHam.png" onclick="switchOnOFF()" id="switchOnOFF" class="switchOnOFF DisplayBlock"></input><br>-->
+           <button onclick="leftButton('addButton')" id="container2" class="leftButtonUnClicked DisplayBlock bigFont labelAround"><img src="../nowyPunkt.png" ></button>
+           <button onclick="leftButton('editButton')" id="container3" class="leftButtonClicked DisplayBlock bigFont labelAround"><img src="../update.png"></button>
+           <button onclick="leftButton('listButton')" id="container4" class="leftButtonUnClicked DisplayBlock bigFont labelAround"><img src="../braki.png"></button>
+          <!-- load Db by click -->
+          <!--<button onClick="getJSON()" id="sendJSONButton" class="DisplayBlock labelAround"> load points (file)</button> -->
+
+
+        <div class="leftMenuArrow" onclick="leftarrow()" id="leftMenuArrow" >
+          <img src="../arrow2.png" id="arrowPic">
+        </div>
+      </div>
+    </div>
+      <div class="logo" ><img src="../logo_krakow_photomonth_red_www-01.png" class="mfkLogo" width="160"></div>
+  </div>
+  <div id='dbContainer'> </div>
+  <a href='https://embedmap.org/'>embedmap.org</a>
+  <script type='text/javascript' src="../maps.js"> </script>
+  <script type='text/module'>
+    import Feature from "ol/Feature.js";
+    import {Style, Icon} from "ol/style/js" ;
+    import Circle from "ol/geom/Circle.js";
+    import * from "ol/interaction/Modify.js";
+  </script>
+</body>
+</html>

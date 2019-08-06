@@ -69,6 +69,14 @@
     position: relative;
   }
 
+  .newUserMsg {
+    position: relative;
+    width: 80vw;
+    height: 50px;
+    background-color: rgba(255,0,0,0.5);
+    border-radius: 10px;
+  }
+
 }
 
 @media only screen and (min-width: 768px) {
