@@ -1,11 +1,15 @@
 var express = require('express');
-//var bodyParser = require('body-parser');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
+var fs = require('fs');
+var cors = require('cors');
 
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(express.static(__dirname + '/'));
+
+// enabling remote access to 'something else' ... ;]
+app.use(cors());
 
 // runing server at localhost:3000
 var server = app.listen(3300, function(){
@@ -46,6 +50,7 @@ app.post('/login', (req,res)=>{
           })
       })
     }
+
     var callCheckUsr = async () => {
       var checkUsrRes = await (checkUsr());
       return checkUsrRes;
@@ -57,48 +62,16 @@ app.post('/login', (req,res)=>{
         res.render('nouser.ejs');
       } else if (checkUsrRes => 1)
         {
-      userPswCmp = checkUsrRes.psw;
-
-      bcrypt.compare(userPsw, userPswCmp, function(err, res2) {
-        if (res2) {
-          res.send('ok!');
-        } else if (!res2) {
-          res.send('NOT ok');
+          bcrypt.compare(userPsw, checkUsrRes.psw, function(err, res2) {
+            if (res2) {
+              // user login data accepted
+              res.render('map.ejs');
+            } else if (!res2) {
+                res.send('NOT ok');
+              }
+          })
         }
       })
-
-      // IF USER EXISTS CHECK HIS PASSWORD
-/*
-      var hashPsw = () => {
-        return new Promise((resolve, reject) => {
-          return bcrypt.hash(userPsw, 10, (err, hash) => {
-            err
-              ? reject(err)
-              : resolve(hash);
-          });
-        });
-      }
-
-      var callHashPsw = async () => {
-        var hashedPsw = await (hashPsw());
-        return hashedPsw;
-      }
-
-      callHashPsw().then(function(hashedPsw) {
-        console.log('user hash:' + hashedPsw);
-        console.log('to compare hash:' + userPswCmp);
-        bcrypt.compare(userPsw, userPswCmp, function(err, res2) {
-          if (res2) {
-            res.send('ok!');
-          } else if (!res2) {
-            res.send('NOT ok');
-          }
-        })
-      })
-*/
-
-  }
-  })
   })
 })
 
@@ -117,64 +90,61 @@ app.post('/newuser', (req,res) => {
     // jesli nie istnieje to hasujemy i zapisujemy uzytkownika
     // odsylamy do strony logowania
 
-    MongoClient.connect('mongodb://localhost:27017', (err, client) => {
-      const db = client.db('users');
-      //chceck if user with that email exists in DB
-      var checkUser = () => {
-        return new Promise ((resolve, reject)=> {
+  MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+    const db = client.db('users');
+    //chceck if user with that email exists in DB
+    var checkUser = () => {
+      return new Promise ((resolve, reject)=> {
+        db
+          .collection('users')
+          .find({email: req.body.email})
+          .toArray(function(err,data) {
+            err
+              ? reject(err)
+              : resolve(data[0]);
+            });
+          });
+      }
+    var callcheckMyUser = async () => {
+      var result = await (checkUser());
+      return result;
+    }
+        //when have answer if user exists and it does not then create new one with password hashed
+    callcheckMyUser().then(function(result) {
+      if (result == undefined) {
+      //console.log('user NOT exists - creating new one');
+        var crypt = () => {
+        //crypt taking time
+          return new Promise ((resolve,reject)=> {
+            let pswHash = bcrypt.hash(req.body.psw, 10, function(err, hash) {
+              err
+                ? resolve(err)
+                : resolve(hash)
+              });
+            });
+          }
+        var callCrypt = async () => {
+          var result2 = await (crypt());
+          return result2;
+        }
+        //when DOne hasing - save useres data with hashed psw to the MongoDB
+        callCrypt().then(function(result2) {
           db
             .collection('users')
-            .find({email: req.body.email})
-            .toArray(function(err,data) {
-              err
-                ? reject(err)
-                : resolve(data[0]);
-              });
-            });
-          }
-      var callcheckMyUser = async () => {
-        var result = await (checkUser());
-        return result;
+            .insertOne({name: req.body.nameR, email: req.body.email, psw: result2});
+            console.log("hash: " + result2);
+          });
+
+        console.log('result:' + result);
+        res.render('index2.ejs');
       }
-          //when have answer if user exists and it does not then create new one with password hashed
-      callcheckMyUser().then(function(result) {
-        if (result == undefined) {
-        //console.log('user NOT exists - creating new one');
-          var crypt = () => {
-          //crypt taking time
-            return new Promise ((resolve,reject)=> {
-              let pswHash = bcrypt.hash(req.body.psw, 10, function(err, hash) {
-                err
-                  ? resolve(err)
-                  : resolve(hash)
-                });
-              });
-            }
-          var callCrypt = async () => {
-            var result2 = await (crypt());
-            return result2;
-          }
-          //when DOne hasing - save useres data with hashed psw to the MongoDB
-          callCrypt().then(function(result2) {
-            db
-              .collection('users')
-              .insertOne({name: req.body.nameR, email: req.body.email, psw: result2});
-              console.log("hash: " + result2);
-            });
-
-            console.log('result:' + result);
-
-            res.render('index2.ejs');
-            //res.json(result);
-            //res.redirect('/welcome1.html');
-          }
-          console.log('result:' + result);
-          res.render('index3.ejs');
-          //res.end();
-        });
-      }); //end of mongoClient.connect
+      console.log('result:' + result);
+      res.render('index3.ejs');
+      //res.end();
+    });
+  }); //end of mongoClient.connect
 });
-
+/*
 app.post('/cryptin', (req, res) => {
   let spis, temp, temp2;
 
@@ -208,8 +178,6 @@ app.post('/cryptin', (req, res) => {
 
   console.log('req.body: ' + req.body.pswLogIn);
   bcrypt.hash(req.body.pswLogIn, saltRounds, (err, hash) =>{
-
-    //console.log('req.body.email:' + req.body.email);
     bcrypt.compare(myPlainTextPassword, hash, (err, res2) =>{
       if (res2) {
         console.log('psw correct!');
@@ -223,32 +191,12 @@ app.post('/cryptin', (req, res) => {
     })
   })
 });
-
+*/
 // ==========================================================
 //
 //                     CZESC Z Map
 //
 // ==========================================================
-
-//var express = require('express');
-//var app = express();
-var fs = require('fs');
-var cors = require('cors');
-var MongoClient = require('mongodb').MongoClient;
-
-// enabling remote access to 'something else' ... ;]
-app.use(cors());
-
-//var bodyParser = require('body-parser');
-//app.use(bodyParser.urlencoded({extended: false}));
-//app.use(bodyParser.json());
-
-// creating server : 5000
-/*
-var server = app.listen(5000, function(){
-  console.log('server Started and running ...!')
-});
-*/
 
 app.post('/submit-data', function(req, res){
   console.log('submitting data...');
