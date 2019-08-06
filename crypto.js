@@ -25,16 +25,16 @@ app.post('/login', (req,res)=>{
   // psw NOT correct - back to login page with information about wrong pswHash
   // correct psw - LOAD map
 
-  var userName = req.body.nameR,
-      userEmail = req.body.email,
-      userPsw = req.body.psw;
+  var userEmail = req.body.email,
+      userPsw = req.body.psw,
+      userPswCmp;
 
   console.log('login process...');
 
   MongoClient.connect('mongodb://localhost:27017', (err, client) => {
     const db = client.db('users');
 
-    var checkPsw = () => {
+    var checkUsr = () => {
       return new Promise((resolve, reject) => {
         db
           .collection('users')
@@ -46,20 +46,59 @@ app.post('/login', (req,res)=>{
           })
       })
     }
-    var callCheckPsw = async () => {
-      var checkPswRes = await (checkPsw());
-      return checkPswRes;
+    var callCheckUsr = async () => {
+      var checkUsrRes = await (checkUsr());
+      return checkUsrRes;
     }
-    callCheckPsw().then(function(checkPswRes) {
-      if(checkPswRes == undefined) {
+
+    callCheckUsr().then(function(checkUsrRes) {
+      if(checkUsrRes == undefined) {
         console.log('user does not exist');
         res.render('nouser.ejs');
+      } else if (checkUsrRes => 1)
+        {
+      userPswCmp = checkUsrRes.psw;
+
+      bcrypt.compare(userPsw, userPswCmp, function(err, res2) {
+        if (res2) {
+          res.send('ok!');
+        } else if (!res2) {
+          res.send('NOT ok');
+        }
+      })
+
+      // IF USER EXISTS CHECK HIS PASSWORD
+/*
+      var hashPsw = () => {
+        return new Promise((resolve, reject) => {
+          return bcrypt.hash(userPsw, 10, (err, hash) => {
+            err
+              ? reject(err)
+              : resolve(hash);
+          });
+        });
       }
-    if (callCheckPsw.psw = bcrypt.hash(userPsw, 10)) {
-      res.render('map.ejs');
-      console.log('login data accepted');
-    };
-    })
+
+      var callHashPsw = async () => {
+        var hashedPsw = await (hashPsw());
+        return hashedPsw;
+      }
+
+      callHashPsw().then(function(hashedPsw) {
+        console.log('user hash:' + hashedPsw);
+        console.log('to compare hash:' + userPswCmp);
+        bcrypt.compare(userPsw, userPswCmp, function(err, res2) {
+          if (res2) {
+            res.send('ok!');
+          } else if (!res2) {
+            res.send('NOT ok');
+          }
+        })
+      })
+*/
+
+  }
+  })
   })
 })
 
