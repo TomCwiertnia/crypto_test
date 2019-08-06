@@ -5,6 +5,7 @@ var MongoClient = require('mongodb').MongoClient;
 
 app.use(express.urlencoded());
 app.use(express.json());
+app.use(express.static(__dirname + '/'));
 
 // runing server at localhost:3000
 var server = app.listen(3300, function(){
@@ -49,7 +50,6 @@ app.post('/login', (req,res)=>{
       var checkPswRes = await (checkPsw());
       return checkPswRes;
     }
-
     callCheckPsw().then(function(checkPswRes) {
       if(checkPswRes == undefined) {
         console.log('user does not exist');
@@ -59,10 +59,8 @@ app.post('/login', (req,res)=>{
       res.render('map.ejs');
       console.log('login data accepted');
     };
-
     })
   })
-
 })
 
 app.get('/ejs', (req, res)=>{
@@ -95,12 +93,10 @@ app.post('/newuser', (req,res) => {
               });
             });
           }
-
       var callcheckMyUser = async () => {
         var result = await (checkUser());
         return result;
       }
-
           //when have answer if user exists and it does not then create new one with password hashed
       callcheckMyUser().then(function(result) {
         if (result == undefined) {
@@ -115,7 +111,6 @@ app.post('/newuser', (req,res) => {
                 });
               });
             }
-
           var callCrypt = async () => {
             var result2 = await (crypt());
             return result2;
@@ -129,7 +124,7 @@ app.post('/newuser', (req,res) => {
             });
 
             console.log('result:' + result);
-            app.use(express.static(__dirname + '/'));
+
             res.render('index2.ejs');
             //res.json(result);
             //res.redirect('/welcome1.html');
@@ -196,8 +191,8 @@ app.post('/cryptin', (req, res) => {
 //
 // ==========================================================
 
-var express = require('express');
-var app = express();
+//var express = require('express');
+//var app = express();
 var fs = require('fs');
 var cors = require('cors');
 var MongoClient = require('mongodb').MongoClient;
@@ -205,9 +200,9 @@ var MongoClient = require('mongodb').MongoClient;
 // enabling remote access to 'something else' ... ;]
 app.use(cors());
 
-var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+//var bodyParser = require('body-parser');
+//app.use(bodyParser.urlencoded({extended: false}));
+//app.use(bodyParser.json());
 
 // creating server : 5000
 /*
