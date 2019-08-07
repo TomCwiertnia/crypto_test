@@ -1,5 +1,6 @@
 @media only screen and (max-width: 768px) {
 
+
   body {
     font-family: 'Raleway', sans-serif;
   }
@@ -31,8 +32,6 @@
     transform: translate(-50%,0);
     top:0vh;
     width: 98vw;
-
-
   }
 
   .buttons button {
@@ -55,6 +54,7 @@
     left:17.5%;
     width: 45vw;
   }
+
   .center {
     margin-left:50%;
     transform:translate(-50%,0);
@@ -80,6 +80,8 @@
 }
 
 @media only screen and (min-width: 768px) {
+
+
 
   body {
     font-size: 1.4vw ;

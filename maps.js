@@ -440,14 +440,14 @@ map.on('click', function(evt){
         }
       // EDIT WINDOW
       let popupInfoElemContent =
-          '<span id="editingPointName" style="font-weight:550; font-size: 0.9rem; text-align: center;">' + pointName + '</span><br>'
-          + '<br>'
+          '<div id="editingPointName" class="pointNameEdit">' + pointName + '</div><br>'
           + '<div class="buttonContainer">'
-            + '<button type="button" value="OK" id="okButton" onClick="editPopupOkClicked()" >OK<br>'
-            + '<button type="button" value="caution" id="cautionButton" onClick="editPopupCautionClicked()">!<br>'
-            + '<button type="button" value="needs supply" id="supplyButton" onClick="editPopupSupplyClicked()">0<br>'
+            + '<button type="button" value="OK" id="okButton" onClick="editPopupOkClicked()" class="updateButton"><br>'
+            + '<button type="button" value="caution" id="cautionButton" onClick="editPopupCautionClicked()" class="updateButton"><br>'
+            + '<button type="button" value="needs supply" id="supplyButton" onClick="editPopupSupplyClicked()" class="updateButton"><br>'
           + '</div>';
       popupInfoElem.innerHTML = popupInfoElemContent;
+
       editOverlay.setPosition(popupInfoCoords);
       map.addOverlay(editOverlay);
       console.log('adding EditOverlay');

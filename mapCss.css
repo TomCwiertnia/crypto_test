@@ -21,11 +21,10 @@
 
 .popupEdit {
   position:relative;
-  opacity: 0.7;
+  opacity: 0.75;
   background-color: white;
   padding: 5px;
-  width: 30vw;
-  font-size: 0.8rem;
+  width: auto;
 }
 
 .popupAddEl {
