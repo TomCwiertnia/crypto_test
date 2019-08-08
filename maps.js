@@ -674,8 +674,7 @@ let name = document.getElementById('newNameInput').value;
   coords[0] = parseFloat(coords[0]);
   coords[1] = parseFloat(coords[1]);
 
-  var today = new Date(),
-      dateRecord = + today.getFullYear() +' '+ today.getMonth() +' '+today.getDate()+' '+today.getHours() +' '+ today.getMinutes();
+  var today = new Date();
 
   var markerN = new ol.Feature({
     geometry: new ol.geom.Point(
@@ -698,7 +697,8 @@ let name = document.getElementById('newNameInput').value;
         markerN.setStyle(minStyle);
       }
   // UPDATING THE DataBase !
-  let newPoint = {name: name, x: coords[0].toString() , y: coords[1].toString(), state: newPointState, typ: 'pub' };
+  var dateRecord = today.getFullYear() +' '+ today.getMonth() +' '+today.getDate()+' '+today.getHours() +' '+ today.getMinutes();
+  let newPoint = {name: name, x: coords[0].toString() , y: coords[1].toString(), state: newPointState, typ: 'pub', time: dateRecord};
   mfkDatabase = [...mfkDatabase, newPoint];
 
   addJSON(JSON.stringify(mfkDatabase));

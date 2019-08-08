@@ -7,6 +7,16 @@
             display: block;
           }
 
+          .popupEditEl {
+            position:relative;
+            opacity: 0.8;
+            background-color: white;
+            padding: 5px;
+            width: 30vw;
+            height:auto;
+            font-size: 0.8rem;
+          }
+
         #map {
               height: 100vh;
               position:relative;
@@ -202,6 +212,7 @@
               transform: translate(-50%,0);
               padding:5px 0px 5px 0px;
               width: auto;
+              border-bottom:1px solid black;
           }
 
           .updateButton {
@@ -383,10 +394,20 @@
           opacity: 0.75;
           background-color: white;
           padding: 5px;
-          width: auto;
+          width: 30vw;
         }
 
         .popupAddEl {
+          position:relative;
+          opacity: 0.8;
+          background-color: white;
+          padding: 5px;
+          width: 30vw;
+          height:auto;
+          font-size: 0.8rem;
+        }
+
+        .popupEditEl {
           position:relative;
           opacity: 0.8;
           background-color: white;
