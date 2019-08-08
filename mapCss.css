@@ -29,10 +29,11 @@
 
 .popupAddEl {
   position:relative;
-  opacity: 1;
+  opacity: 0.8;
   background-color: white;
   padding: 5px;
   width: 30vw;
+  height:auto;
   font-size: 0.8rem;
 }
 
@@ -60,10 +61,6 @@
 .buttonClicked {
   font-weight: 700;
   border: 1px dotted black;
-}
-
-.newPointName {
-  width: 80%;
 }
 
 .centerDiv {

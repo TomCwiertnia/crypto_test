@@ -293,24 +293,29 @@ map.on('click', function(evt){
   if (state == 'add points' && !document.getElementById('addButtonsContainer')) {
   // to chyba wydaje się działaćź i zwracać pozycję myszy
   // console.log(ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'));
-    var pointCoords = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
-    var pointColor;
-    var newId = mfkDatabase.length+1;
-    let popupAddCoords = [];
-    let mapExtent = map.getView().calculateExtent(map.getSize());
+    var pointCoords = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'),
+        pointColor,
+        newId = mfkDatabase.length+1,
+        popupAddCoords = [],
+        mapExtent = map.getView().calculateExtent(map.getSize());
     // setting up the MIDDLE point of the map for info WINDOW to be displayed
     popupAddCoords[0] = mapExtent[0]+((mapExtent[2]-mapExtent[0])/4);
     popupAddCoords[1] = mapExtent[1]+((mapExtent[3]-mapExtent[1])/1.3);
+
+    // ADDING NEWPOINT WINDOW
     let popupAddElContent =
-        '<div class="centerDiv"><span style="font-weight:bold">Nazwa:</span><br>'
-        + '<input class="newPointName" id="newNameInput"></input></div><br>'
-        + '<br>'
-        + '<div class="buttonContainer" id="addButtonsContainer">'
-          + '<button type="button" class="addPopupOk" value="OK" id="addOkButton" onClick="addButtonClicked(\'ok\')">ok<br>'
-          + '<button type="button" class="addPopupCaution" value="caution" id="addCautionButton" onClick="addButtonClicked(\'caution\')">half<br>'
-          + '<button type="button" class="addPopupSupply" value="needs supply" id="addSupplyButton" onClick="addButtonClicked(\'supply\')">0<br>'
-        + '<button onclick="closeAddWindow()">cancel</button> <button id="addSaveButton" onclick="addNewPointSaveButton()">save</button>'
-        + '</div>';
+          '<label for="newNameInput" style="font-weight:600"> Nazwa miejsca </label>'
+        + '<input class="newPointName" id="newNameInput" ></input></div>'
+        + '<label for="addButtonsContainer" style="display:block; font-weight: 600;">Stan</label>'
+        + '<div class="addButtonsContainer" id="addButtonsContainer">'
+          + '<button type="button" class="updateButton" value="OK" id="addOkButton" onClick="addButtonClicked(\'ok\')">'
+          + '<button type="button" class="updateButton" value="caution" id="addCautionButton" onClick="addButtonClicked(\'caution\')">'
+          + '<button type="button" class="updateButton" value="needs supply" id="addSupplyButton" onClick="addButtonClicked(\'supply\')">'
+        + '</div>'
+        + '<button onclick="closeAddWindow()">cancel</button> <button id="addSaveButton" onclick="addNewPointSaveButton()">save</button>';
+
+
+
     let windowCheck = document.getElementById('popupAddEl');
     //console.log('windowcheck:' + windowCheck);
 
@@ -337,13 +342,8 @@ map.on('click', function(evt){
     popupAddEl.innerHTML = popupAddElContent;
     popupAddEl.id = "popupAddEl";
 
-    var addPointOverlay = new ol.Overlay({
-      element: popupAddEl
-    });
-
-    var addPointOverlay2 = new ol.Overlay({
-      element: popupAddElHidden
-    });
+    var addPointOverlay = new ol.Overlay({ element: popupAddEl }),
+        addPointOverlay2 = new ol.Overlay({ element: popupAddElHidden });
 
     addPointOverlay.setPosition(popupAddCoords);
     map.addOverlay(addPointOverlay);
@@ -440,8 +440,8 @@ map.on('click', function(evt){
         }
       // EDIT WINDOW
       let popupInfoElemContent =
-          '<div id="editingPointName" class="pointNameEdit">' + pointName + '</div><br>'
-          + '<div class="buttonContainer">'
+          '<p id="editingPointName" class="pointNameEdit">' + pointName + '</p>'
+          + '<div class="editButtonContainer" name="editC">'
             + '<button type="button" value="OK" id="okButton" onClick="editPopupOkClicked()" class="updateButton"><br>'
             + '<button type="button" value="caution" id="cautionButton" onClick="editPopupCautionClicked()" class="updateButton"><br>'
             + '<button type="button" value="needs supply" id="supplyButton" onClick="editPopupSupplyClicked()" class="updateButton"><br>'
@@ -667,13 +667,15 @@ function addNewPointSaveButton() {
 
 let name = document.getElementById('newNameInput').value;
   if (name !== '' && name !== 'name !') {
+    let coords = (document.getElementById('elHidden').innerHTML).split(","),
+        newPointState;
+
   console.log('...saving new point');
-  let coords = (document.getElementById('elHidden').innerHTML).split(",");
-
-  let newPointState;
-
   coords[0] = parseFloat(coords[0]);
   coords[1] = parseFloat(coords[1]);
+
+  var today = new Date(),
+      dateRecord = + today.getFullYear() +' '+ today.getMonth() +' '+today.getDate()+' '+today.getHours() +' '+ today.getMinutes();
 
   var markerN = new ol.Feature({
     geometry: new ol.geom.Point(
@@ -720,12 +722,14 @@ function leftarrow() {
   var el = document.getElementById('menuContainer');
   var rect = el.getBoundingClientRect(), top = el.top, height = el.height, el = el.parentNode;
 console.log('left:' + rect.left);
-  //if menu is hidden
+
+  //IF LEFT MENU IS HIDDEN
   if (rect.left<0) {
     document.getElementById('menuContainer').style.left = '0px';
     document.getElementById('menuContainer').classList.add("transArrow");
     document.getElementById('leftMenu').classList.add("shadow");
     console.log('left:' + rect.left);
+    //IF LEFT MENU IS SHOWN THEN CHECK THE SIZE OF DISPLAY
   } else if (rect.left >= 0 && window.innerWidth > 768) {
     document.getElementById('menuContainer').style.left = '-25vw';
     document.getElementById('leftMenu').classList.remove("shadow");
@@ -762,12 +766,23 @@ function makeRedList() {
 }
 
 function leftButton(buttonClicked) {
-  let cont2 = document.getElementById('container2').classList;
-  let cont3 = document.getElementById('container3').classList;
-  let cont4 = document.getElementById('container4').classList;
-  let red = document.getElementById('redList');
+  let cont2 = document.getElementById('container2').classList,
+      cont3 = document.getElementById('container3').classList,
+      cont4 = document.getElementById('container4').classList,
+      red = document.getElementById('redList');
+
+  let editWinCheck = document.getElementById('popupEditEl'),
+      addWinCheck = document.getElementById('popupAddEl');
+  // if edit window exists - destroy it
+  if (editWinCheck){
+    editWinCheck.parentNode.removeChild(editWinCheck);
+  } else if(addWinCheck) {
+    //same with add window
+    addWinCheck.parentNode.removeChild(addWinCheck);
+  }
 
   if(buttonClicked == 'addButton') {
+
     cont2.add('leftButtonClicked');
     cont2.remove('leftButtonUnClicked');
     cont3.remove('leftButtonClicked');
@@ -777,7 +792,7 @@ function leftButton(buttonClicked) {
     if (red && window.innerWidth > 768) {
       red.remove();
       if (window.innerWidth > 768) {
-        document.getElementById('leftMenu').style.height = '15vh';
+        document.getElementById('leftMenu').style.height = 'auto';
       }
     }
   } else if(buttonClicked == 'editButton'){
@@ -790,14 +805,14 @@ function leftButton(buttonClicked) {
     if (red) {
       red.remove();
       if (window.innerWidth > 768) {
-        document.getElementById('leftMenu').style.height = '15vh';
+        document.getElementById('leftMenu').style.height = 'auto';
       }
     }
   } else if (buttonClicked == 'listButton') {
     if (red) {
       red.remove();
       if (window.innerWidth > 768) {
-        document.getElementById('leftMenu').style.height = '15vh';
+        document.getElementById('leftMenu').style.height = 'auto';
       }
       return;
     }
