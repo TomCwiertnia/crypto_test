@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="PL" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Kolportaz materialow</title>
+    <link rel="stylesheet" type="text/css" href="welcome1.css">
+    <script src="welcome1.js"></script>
+
+  </head>
+  <body>
+    <div id="container1" class="container1">
+      <div id="regWin">
+        <form method="POST" action="http://localhost:3300/newuser" id="registrationForm" class="regLogForm" target="hidden2">
+          <img src="logo1.png" class="logo">
+          <p style="font-size:0.9em" class="center"> account with given email address already exists ! </p>
+          <p style="font-weight:600;" class="center">Rejestracja</p>
+          <label for=nameR style="display: inline-block">imie <input name=nameR type=text style="display:block"/>
+          </label>
+          <label for=email style="display: inline-block">email <input name=email type=email style="display:block"/>
+          </label>
+          <label for=psw style="display:inline-block">haslo <input name=psw type=password style="display:block"/>
+          </label>
+
+        </form>
+        <button type="submit" form="registrationForm" class="regButton center">rejestruj</button>
+      </div>
+      <div class="buttons">
+        <button id="regButton" type="button" onclick="signUp()" class="chosen ">Rejestracja</button>
+        <button id="loginButton" type="button" onclick="logIn()" class="">Logowanie</button>
+      </div>
+      <!--load POST answer to hidden iFrame so we dont get redirection after receving it -->
+      <iframe name="hidden2" style="display:none" id="hidden2"></iframe>
+
+
+    </div>
+
+
+  </body>
+</html>

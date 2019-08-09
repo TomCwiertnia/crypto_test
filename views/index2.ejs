@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="PL" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Kolportaz materialow</title>
+    <link rel="stylesheet"  href="/welcome1.css">
+    <script src="/welcome1.js"></script>
+  </head>
+  <body>
+
+    <!-- dodac info o nowym uzytkowniku -->
+
+    <div id="container1" class="container1">
+      <div id="loginWin">
+        <form action="http://localhost:3300/login" method="POST" id="registrationForm" class="regLogForm" >
+          <img src="logo1.png" class="logo">
+          <p class="center" style="font-size: 0.9em; width:auto;"> New user have been created ! </p> 
+          <p style="font-weight:600" class="center"> Logowanie</p>
+          <label for=email style="display: inline-block">email <input name=email type=email style="display:block"/>
+          </label>
+          <label for=psw style="display:inline-block">haslo <input name=psw type=password style="display:block"/>
+          </label>
+          <button type="submit" form="registrationForm" class="regButton center">zaloguj</button>
+          </form>
+      </div>
+      <div class="buttons">
+        <button id="regButton" type="button" onclick="signUp()" class=" ">
+          Rejestracja
+        </button>
+        <button id="loginButton" type="button" onclick="logIn()" class="chosen">
+          Logowanie
+        </button>
+      </div>
+
+      <!--load POST answer to hidden iFrame so we dont get redirection after receving it -->
+      <iframe name="hidden2" style="display:none" id="hidden2"></iframe>
+    </div>
+  </body>
+</html>
