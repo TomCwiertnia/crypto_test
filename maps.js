@@ -1,3 +1,5 @@
+import Geolocation from '../ol/Geolocation.js';
+
 var bdObj = [];
  /*var mfkDatabase = [
   { name: 'MOCAK', x: '19.961518', y:'50.047856' , state:'100', typ: 'gallery'},
@@ -37,7 +39,7 @@ var map = new ol.Map({
     view: new ol.View({
           center: ol.proj.fromLonLat([19.943, 50.057]),
           zoom: 14
-            }),
+        }),
     layers: [
           new ol.layer.Tile({
           source: new ol.source.OSM()
@@ -47,6 +49,15 @@ var map = new ol.Map({
     // no zoom-in or zoom-otu buttons
     controls: []
 });
+
+var geolocation = new ol.Geolocation({
+  trackingOptions: {
+    enableHighAccuracy: true
+  },
+  projection: map.getView().getProjection()
+});
+console.log('---------------------------------------');
+console.log(geolocation.getPosition());
 
 var pointStyle2 = new ol.style.Style({
   image: new ol.style.Circle({
@@ -200,21 +211,32 @@ window.onload = function() {
   // load Db on the start - from file
 
 }
+
+// NEEDs to be implemented due to resize of the window and placment of the left menu (while hidden)
+window.addEventListener('resize', function(event){
+  let rect = document.getElementById('menuContainer').getBoundingClientRect();
+  if(window.innerWidth <=768 && rect.left <=0) {
+    document.getElementById('menuContainer').style.left = '-45vw';
+    console.log('-45 done ');
+  } else if(window.innerWidth >768 && rect.left <=0) {
+      document.getElementById('menuContainer').style.left = '-25vw';
+      console.log('-25 done ');
+  }
+});
+
 /*
 DISPLAYING POP UP with FEATURE INFO at pixel
 */
-
 map.on('pointermove', function(evt){
   let popupCoordinates = [];
   let popupElement = document.createElement('div');
   let popupElementEdit = document.createElement('div');
   let divWidth = document.getElementById('map').offsetWidth;
   let divHeight = document.getElementById('map').offsetHeight;
+  let popup2;
   /*
-
   move pop up a little bit otherwise it will block the posibility to change
   it's status (color)
-
   */
   popupCoordinates[0] = evt.coordinate[0]+0.1*divWidth;
   popupCoordinates[1] = evt.coordinate[1]+0.1*divHeight;
@@ -229,7 +251,7 @@ map.on('pointermove', function(evt){
   map.forEachFeatureAtPixel(evt.pixel, function(feature){
     let stateSource = feature.get('id');
     //console.log('statesource (id):' + stateSource);
-    let objectState, objectType;
+    let objectState, objectType, objectTime;
     if (feature) {
       // CREATE A INFO MESSAGE FOR A FEATURE AT pixel
       if (document.getElementById('popup')) {
@@ -244,10 +266,17 @@ map.on('pointermove', function(evt){
       });
           // in search of objects STATE
                               // check database for name and return state
-      for (let i=0; i<mfkDatabase.length-1; i++){
+      for (let i=0; i<mfkDatabase.length; i++){
         if(mfkDatabase[i].name == stateSource) {
           objectState = mfkDatabase[i].state;
           objectType = mfkDatabase[i].typ;
+          //if there is a record without a time
+          objectTime = mfkDatabase[i].time;
+          objectTime = objectTime.split(' ');
+          if(objectTime[4]<10) {
+            objectTime[4] = '0' + objectTime[4];
+          }
+
           if (objectState == '100') {
             objectState = 'full'
           } else if (objectState == '50') {
@@ -257,7 +286,9 @@ map.on('pointermove', function(evt){
               }
         }
       }
-      popupElement.innerHTML = '<div style="text-align:center;">' + feature.get('id') + '</div>';
+
+      popupElement.innerHTML = '<div style="text-align:center; font-weight:600; style="font-size: 1.1em">' + feature.get('id') + '</div>'
+                              + '<p style="font-size: 0.8em">Ostatni update: '+ objectTime[1]+'/'+objectTime[2]+' '+objectTime[3]+':'+objectTime[4];
       // + '<br>state:' + objectState + '<br>' + 'typ:' + objectType;
       popup2.setPosition(popupCoordinates);
       map.addOverlay(popup2);
@@ -744,7 +775,6 @@ console.log('left:' + rect.left);
 function makeRedList() {
   if (document.getElementById('redList')) {
     //return;
-
   }
   let redList = document.createElement('div');
   redList.id = 'redList';
@@ -782,7 +812,6 @@ function leftButton(buttonClicked) {
   }
 
   if(buttonClicked == 'addButton') {
-
     cont2.add('leftButtonClicked');
     cont2.remove('leftButtonUnClicked');
     cont3.remove('leftButtonClicked');
@@ -841,31 +870,28 @@ function redListClick(clickedId){
 
   for (i=0; i<mfkDatabase.length-1; i++){
       if (mfkDatabase[i].name == name) {
-        newCenterCoords = [parseFloat(mfkDatabase[i].x), parseFloat(mfkDatabase[i].y)];
+        newCenterCoords = [parseFloat(mfkDatabase[i].x-0.001), parseFloat(mfkDatabase[i].y)];
         console.log('x:' + newCenterCoords[0]);
         console.log('y:' + newCenterCoords[1]);
       }
     }
     //    ===================================================
-           let testCircle = new ol.style.Style({
-             image: new ol.style.Circle({
-               radius: 12,
-               fill: null,
-               stroke: new ol.style.Stroke({
-                 color: 'rgba(255,0,0,0.5)',
-                 width:7
-               })
-             })
-           });
-
-           var fet = new ol.Feature(
-             new ol.geom.Point(ol.proj.fromLonLat(newCenterCoords))
-           );
-
-             fet.setStyle(testCircle);
-             vectorSource2.addFeature(fet);
-     //    ===================================================
-
+    let testCircle = new ol.style.Style({
+      image: new ol.style.Circle({
+            radius: 12,
+            fill: null,
+            stroke: new ol.style.Stroke({
+            color: 'rgba(255,0,0,0.5)',
+            width:7
+          })
+        })
+    });
+   var fet = new ol.Feature(
+            new ol.geom.Point(ol.proj.fromLonLat(newCenterCoords))
+   );
+   fet.setStyle(testCircle);
+   vectorSource2.addFeature(fet);
+   //    ===================================================
      map.setView(new ol.View({
        center: ol.proj.fromLonLat(newCenterCoords),
        zoom: 16
@@ -875,19 +901,3 @@ function redListClick(clickedId){
        vectorSource2.removeFeature(fet);
      }, 1500);
 }
-/*
-function legendOnMouseover() {
-  var legMouseHtml = '<span id="container2">add points</span><br>'
-    + '<button type="button" onclick="switchOnOFF()" id="switchOnOFF">switch</button>';
-  document.getElementById('legend').innerHTML = legMouseHtml;
-  document.getElementById('legend').classList.remove('smaller');
-  document.getElementById('legend').classList.add('bigger');
-}
-
-function legendOnMouseOut() {
-  var legMouseHtml = '<span id="container2">leg</span>';
-  document.getElementById('legend').innerHTML = legMouseHtml;
-  document.getElementById('legend').classList.remove('bigger');
-  document.getElementById('legend').classList.add('smaller');
-}
-*/
